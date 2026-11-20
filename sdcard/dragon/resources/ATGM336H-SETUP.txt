@@ -1,0 +1,44 @@
+## Future ATGM336H GPS receiver
+
+GPS is optional and disabled initially. The C5 board has no built-in GPS. In
+**GPS setup**, select **PRESET ATGM336H** to load RX GPIO12, 9600 baud and 8N1;
+selecting a preset preserves the current on/off state. Leave it off until a
+receiver is attached. **Generic NMEA** retains manually selected UART settings;
+changing the baud returns to the generic preset. Settings persist in NVS.
+
+| GPS connection | C5 connection |
+|---|---|
+| TX / TXD, 3.3 V logic | J5 pin 1 / GPIO12 / UART RX |
+| GND | Common GND |
+| RX / RXD | Leave unconnected; firmware receives only |
+| Supply | Use the voltage specified for the actual module/breakout |
+
+The manufacturer specifies NMEA0183 at 9600 baud for the
+[ATGM336H-5N family](https://icofchina.com/daohang/danpin/2525.html) and
+[ATGM336H-5NR32](https://www.hzzkw.com/daohang/danpin/2440.html). Bare modules
+require 2.7–3.6 V, typically 3.3 V; a breakout's regulator may change its VIN
+requirement. Check the exact board before supplying power. UART signals into
+the ESP32 must remain 3.3 V. Other ATGM336H variants or previously reconfigured
+receivers may need a different baud, available through Generic NMEA.
+
+Use NMEA RMC and GGA sentences. The transport accepts GN/GP and other NMEA
+talker prefixes, validates checksums, and discards stale or interrupted fixes.
+No CASIC commands, module baud changes, saved receiver configuration or antenna
+power commands are transmitted. Position and RTC synchronization require an
+actual fresh fix; no receiver is connected or physically verified yet.
+
+```text
+gps external preset atgm336h
+gps external status
+gps external on 12 9600
+gps reception
+gps clock sync
+gps external off
+```
+
+The `preset` command changes the saved host preset without enabling it.
+`on 12 9600` explicitly enables the generic NMEA receiver. On the device, enable
+the selected ATGM336H preset with the **EXTERNAL GPS: OFF** control after wiring.
+Leave the receiver outside with a suitable antenna and a clear sky view for
+its first fix. Clock synchronization writes UTC to the board RTC; the saved
+display offset controls local time.

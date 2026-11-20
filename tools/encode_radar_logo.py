@@ -1,0 +1,202 @@
+"""Encode supplied artwork into native-size LVGL assets.
+
+The supplied sources remain unchanged. Transparent padding and explicitly
+listed photo margins are excluded; native sizes avoid runtime scaling.
+Requires Pillow. This is a build-time asset conversion, not a firmware dependency.
+"""
+from pathlib import Path
+from PIL import Image
+from lz_block import pack
+import zlib
+root=Path(__file__).resolve().parents[1]
+logos=[('radar_logo','media/branding/dragon-detector.png'),
+       ('radar_logo_valleytech','media/theme-logos/valleytech.png'),
+       ('radar_logo_biscuit','media/theme-logos/biscuit-shop.png'),
+       ('radar_logo_marauder','media/theme-logos/jcmk.png'),
+       ('radar_logo_toool','media/theme-logos/toool.png'),
+       ('radar_logo_church','media/theme-logos/church-of-malware.png'),
+       ('watch_logo_church','media/theme-logos/church-of-malware.png'),
+       ('radar_logo_ci','media/theme-logos/covert-instruments.png'),
+       ('radar_logo_mcnally','media/theme-logos/mcnally-source.webp'),
+       ('watch_logo_ci','media/theme-logos/covert-instruments.png'),
+       ('watch_logo_mcnally','media/theme-logos/mcnally-source.webp'),
+       ('radar_logo_lpl','media/theme-logos/lockpickinglawyer.jpg'),
+       ('watch_logo_lpl','media/theme-logos/lockpickinglawyer.jpg'),
+       ('radar_logo_awok','media/theme-logos/awok.png'),
+       ('watch_logo_awok','media/theme-logos/awok.png'),
+       ('radar_logo_baph','media/theme-logos/baph0mau5.jpg'),
+       ('watch_logo_baph','media/theme-logos/baph0mau5.jpg'),
+       ('radar_logo_wdgwars','media/theme-logos/wdgwars.jpg'),
+       ('watch_logo_wdgwars','media/theme-logos/wdgwars.jpg'),
+       ('radar_logo_n3rdsec','media/theme-logos/n3rdsec.jpg'),
+       ('watch_logo_n3rdsec','media/theme-logos/n3rdsec.jpg'),
+       ('radar_logo_halehound','media/theme-logos/halehound-wordmark.webp'),
+       ('watch_logo_halehound','media/theme-logos/halehound-wordmark.webp'),
+       ('watch_logo_halehound_splash','media/theme-logos/halehound-splash.webp'),
+       ('radar_logo_waveshare','media/theme-logos/waveshare.png'),('watch_logo_waveshare','media/theme-logos/waveshare.png'),
+       ('radar_logo_m5stack','media/theme-logos/m5stack.jpg'),('watch_logo_m5stack','media/theme-logos/m5stack.jpg'),
+       ('radar_logo_lab5','media/theme-logos/lab5.jpg'),('watch_logo_lab5','media/theme-logos/lab5.jpg'),
+       ('radar_logo_sasquach','media/theme-logos/sasquach-head.jpg'),('watch_logo_sasquach','media/theme-logos/sasquach-cartoon.jpg'),
+       ('radar_logo_nyan','media/theme-logos/nyan-devices.png'),('watch_logo_nyan','media/theme-logos/nyan-devices.png'),
+       ('radar_logo_dmac','media/theme-logos/dmac.jpg'),('watch_logo_dmac','media/theme-logos/dmac.jpg'),
+       ('radar_logo_seeed','media/theme-logos/seeed-studio.png'),('watch_logo_seeed','media/theme-logos/seeed-studio.png'),
+       ('radar_logo_dagnazty','media/theme-logos/dagnazty.jpg'),('watch_logo_dagnazty','media/theme-logos/dagnazty.jpg'),
+       ('radar_logo_deflock','media/theme-logos/deflock.png'),('watch_logo_deflock','media/theme-logos/deflock.png')]
+logos += [('radar_logo_lpu','media/theme-logos/lockpickers-united.jpg'),('watch_logo_lpu','media/theme-logos/lockpickers-united.jpg'),('radar_logo_ghostbusters','media/theme-logos/ghostbusters.jpg'),('watch_logo_ghostbusters','media/theme-logos/ghostbusters.jpg'),('boot_dragon_logo','media/branding/dragon-detector.png')]
+logos += [('radar_logo_hackazillarex','media/theme-logos/hackazillarex.jpg'),('watch_logo_hackazillarex','media/theme-logos/hackazillarex.jpg'),('radar_logo_m33k','media/theme-logos/m33k-t3ch.png'),('watch_logo_m33k','media/theme-logos/m33k-t3ch.png')]
+logos += [('radar_logo_capsule','media/theme-logos/capsule-corp.png'),('watch_logo_capsule','media/theme-logos/capsule-corp.png'),('radar_logo_sparrows','media/theme-logos/sparrows-source.jpg'),('watch_logo_sparrows','media/theme-logos/sparrows-source.jpg')]
+logos += [('radar_logo_dzaz','media/theme-logos/dzaz.png'),('watch_logo_dzaz','media/theme-logos/dzaz.png')]
+logos += [('radar_logo_can_commander','media/theme-logos/can-commander-mk.jpg'),('watch_logo_can_commander','media/theme-logos/can-commander-mk.jpg')]
+logos += [('radar_logo_ogg','media/theme-logos/ogg-source.jpg'),('watch_logo_ogg','media/theme-logos/ogg-source.jpg'),('radar_logo_xombi','media/theme-logos/xombi-source.jpg'),('watch_logo_xombi','media/theme-logos/xombi-source.jpg')]
+logos += [('radar_logo_muldersrevenge','media/theme-logos/muldersrevenge-source.png'),('watch_logo_muldersrevenge','media/theme-logos/muldersrevenge-source.png')]
+logos += [('watch_logo_mitm','media/theme-logos/mitm-source.jpg')]
+logos += [('radar_logo_vp','media/theme-logos/vectorpotential-vp-source.webp'),('watch_logo_vp','media/theme-logos/vectorpotential-vp-source.webp'),('watch_lock_vp','media/theme-logos/vectorpotential-lock-source.webp')]
+logos += [('radar_logo_argyle','media/theme-logos/argyle-source.webp'),('watch_logo_argyle','media/theme-logos/argyle-source.webp')]
+logos += [('radar_logo_llt','media/theme-logos/lawlocktools-source.avif'),('watch_logo_llt','media/theme-logos/lawlocktools-source.avif'),('radar_logo_moki','media/theme-logos/moki-source.png'),('watch_logo_moki','media/theme-logos/moki-source.png')]
+lines=['// Generated by tools/encode_radar_logo.py; supplied artwork, see CREDITS.md.', '#include <lvgl.h>', '#include "board_pins.h"', '#include "lz_block.h"', '#include <esp_heap_caps.h>']
+logos += [('radar_logo_delta44','media/theme-logos/delta44-padlock.png'),('watch_logo_delta44','media/theme-logos/delta44-logo-source.webp'),('watch_dial_delta44','media/theme-logos/delta44-logo-source.webp')]
+for name,path in logos:
+    source=Image.open(root/path).convert('RGBA')
+    if path.endswith('mcnally-source.webp'):
+        # The supplied product photo contains the original square artwork at
+        # these bounds; preserve the artwork itself, excluding the fabric.
+        assert source.size==(1114,1114)
+        source=source.crop((140,140,974,974))
+    if path.endswith('lab5.jpg'):
+        assert source.size==(1400,933)
+        source=source.crop((210,35,1190,900))
+    if path.endswith('sasquach-head.jpg'):
+        assert source.size==(400,400)
+        source=source.crop((94,0,302,313))
+    if path.endswith('n3rdsec.jpg'):
+        # Exclude the photograph's blank margins while retaining the full skull
+        # and a white safety margin for the circular display mask.
+        assert source.size==(2048,2048)
+        source=source.crop((415,309,1659,1611))
+    if path.endswith('deflock.png'):
+        assert source.size==(512,512)
+        source=source.crop((99,89,410,430))
+    if path.endswith('covert-instruments.png'):
+        source=source.crop(source.convert('RGB').getbbox())
+    if path.endswith('vectorpotential-vp-source.webp'):
+        # Display the supplied logo region, excluding the surrounding photo margin.
+        # The complete source (including its AI label) is retained unchanged.
+        assert source.size==(1024,1024)
+        source=source.crop((50,280,970,710))
+    if name=='watch_logo_llt':source=source.crop((0,0,75,75))
+    if path.endswith('moki-source.png'):source=source.crop((60,6,225,170))
+    source=source.crop(source.getbbox())
+    if name.startswith('watch_') and name not in ('watch_logo_hackazillarex','watch_logo_m33k','watch_logo_capsule','watch_logo_sparrows','watch_logo_dzaz','watch_logo_can_commander','watch_logo_ogg','watch_logo_xombi','watch_logo_muldersrevenge','watch_logo_mitm','watch_logo_vp','watch_lock_vp','watch_logo_argyle','watch_logo_llt','watch_logo_moki','watch_logo_delta44','watch_dial_delta44'):lines.append('#ifndef BOARD_RADAR_LITE')
+    # One native circle serves both startup and the Dragon Ball watch.
+    # Its bounding square also fits inside each circular display.
+    sizes=([(466,194),(360,150),(240,100)] if name=='radar_logo_delta44' else
+           [(466,49),(360,38),(240,25)] if name=='watch_logo_delta44' else
+           [(466,80),(360,62),(240,41)] if name=='watch_dial_delta44' else
+           [(466,34),(360,26),(240,17)] if name=='radar_logo_llt' else
+           [(466,181),(360,140),(240,93)] if name=='watch_logo_llt' else
+           [(466,57),(360,44),(240,29)] if name=='radar_logo_moki' else
+           [(466,220),(360,170),(240,113)] if name=='watch_logo_moki' else
+           [(466,233),(360,180),(240,120)] if name=='watch_logo_argyle' else
+           [(466,57),(360,44),(240,29)] if name=='radar_logo_argyle' else
+           [(466,414),(360,320),(240,213)] if name=='watch_lock_vp' else
+           [(466,135),(360,104),(240,69)] if name=='radar_logo_vp' else
+           [(466,52),(360,40),(240,27)] if name=='watch_logo_vp' else
+           [(466,466),(360,360),(240,240)] if name=='watch_logo_mitm' else
+           [(466,238),(360,184),(240,123)] if name=='watch_logo_muldersrevenge' else
+           [(466,67),(360,52),(240,35)] if name=='radar_logo_muldersrevenge' else
+           [(466,155),(360,120),(240,80)] if name=='watch_logo_ogg' else
+           [(466,222),(360,172),(240,115)] if name=='watch_logo_xombi' else
+           [(466,67),(360,52),(240,35)] if name=='radar_logo_xombi' else
+           [(466,117),(360,90),(240,60)] if name=='watch_logo_can_commander' else
+           [(466,57),(360,44),(240,29)] if name=='radar_logo_can_commander' else
+           [(466,127),(360,98),(240,65)] if name=='watch_logo_dzaz' else
+           [(466,186),(360,144),(240,96)] if name=='watch_logo_sparrows' else
+           [(466,70),(360,54),(240,36)] if name=='radar_logo_sparrows' else
+           [(466,127),(360,98),(240,65)] if name=='watch_logo_capsule' else
+           [(466,264),(360,204),(240,136)] if name=='watch_logo_hackazillarex' else
+           [(466,207),(360,160),(240,107)] if name=='watch_logo_m33k' else
+           [(466,280),(360,216),(240,144)] if name.startswith('boot_') else
+           [(466,186),(360,144),(240,96)] if name in ('radar_logo_lpl','radar_logo_mcnally','watch_logo_lpu') else
+           [(466,132),(360,102),(240,68)] if name=='watch_logo_ghostbusters' else
+           [(466,70),(360,54),(240,36)] if name=='watch_logo_lpl' else
+           [(466,207),(360,160),(240,107)] if name=='watch_logo_deflock' else
+           [(466,326),(360,252),(240,168)] if name=='watch_logo_church' else
+           [(466,80),(360,62),(240,41)] if name=='watch_logo_ci' else
+           [(466,84),(360,65),(240,43)] if name=='watch_logo_mcnally' else
+           [(466,94),(360,73),(240,49)] if name=='watch_logo_awok' else
+           [(466,124),(360,96),(240,64)] if name in ('watch_logo_baph','watch_logo_n3rdsec','watch_logo_dagnazty') else
+           [(466,112),(360,87),(240,58)] if name=='watch_logo_wdgwars' else
+           [(466,120),(360,93),(240,62)] if name=='watch_logo_halehound_splash' else
+           [(466,80),(360,62),(240,41)] if name=='watch_logo_halehound' else
+           [(466,116),(360,90),(240,60)] if name in ('watch_logo_waveshare','watch_logo_lab5','watch_logo_nyan','watch_logo_dmac','watch_logo_seeed') else
+           [(466,96),(360,74),(240,49)] if name=='watch_logo_m5stack' else
+           [(466,140),(360,108),(240,72)] if name=='watch_logo_sasquach' else [(466,57),(360,44),(240,29)])
+    for resolution,height in sizes:
+        width=round(source.width*height/source.height)
+        assert width<=height*(8.1 if name=='radar_logo_llt' else 4 if name in ('watch_logo_delta44','watch_dial_delta44') else 2.2 if name.endswith('_vp') else 2),'Logo exceeds radar header bounds'
+        if name.startswith('boot_'):
+            assert width*width+height*height <= (resolution*.96)**2,'Boot logo would clip at the circular bezel'
+        icon=source.resize((width,height),Image.Resampling.LANCZOS)
+        if name=='radar_logo':
+            # Small header logo stays uncompressed as the allocation fallback.
+            pixels=[]
+            for r,g,b,a in icon.getdata():
+                value=((r>>3)<<11)|((g>>2)<<5)|(b>>3)
+                pixels.extend([value>>8,value&255,a])
+            fmt='LV_IMG_CF_TRUE_COLOR_ALPHA'
+        else:
+            # Indexed artwork retains alpha and antialiasing.
+            compact=name in ('boot_dragon_logo','watch_logo_church','radar_logo_seeed','watch_logo_seeed','radar_logo_dagnazty','watch_logo_dagnazty','radar_logo_n3rdsec','watch_logo_n3rdsec','radar_logo_toool','radar_logo_ci','watch_logo_ci','watch_logo_mcnally','radar_logo_waveshare','watch_logo_waveshare','radar_logo_deflock','watch_logo_deflock')
+            # Sixteen colors keep the 240px seals compact.
+            compact=compact or 'ghostbusters' in name or name.endswith('_lpu') or (resolution==240 and name in ('radar_logo_lpl','watch_logo_lpl'))
+            compact=compact or name in ('radar_logo_mcnally','radar_logo_capsule','watch_logo_capsule','radar_logo_sparrows','watch_logo_sparrows')
+            count=16 if compact else 256
+            indexed=icon.quantize(colors=count,method=Image.Quantize.FASTOCTREE,dither=Image.Dither.NONE)
+            palette=indexed.getpalette('RGBA');pixels=[]
+            for i in range(count):
+                r,g,b,a=palette[i*4:i*4+4];pixels.extend((b,g,r,a))
+            if compact:
+                # These monochrome/few-color marks fit sixteen palette entries.
+                # Each scanline is byte-aligned, including odd widths.
+                data=indexed.tobytes()
+                for y in range(height):
+                    for x in range(0,width,2):
+                        pixels.append((data[y*width+x]<<4)|(data[y*width+x+1] if x+1<width else 0))
+                assert len(pixels)==64+height*((width+1)//2)
+                fmt='LV_IMG_CF_INDEXED_4BIT'
+            else:
+                pixels.extend(indexed.tobytes());fmt='LV_IMG_CF_INDEXED_8BIT'
+        lines.append('#if SCREEN_RES >= 466' if resolution==466 else '#elif SCREEN_RES >= 360' if resolution==360 else '#else')
+        raw_size=len(pixels)
+        lines.append(f'// Raw pixel CRC32: {zlib.crc32(bytes(pixels)):08x}; bytes: {raw_size}')
+        if name!='radar_logo':pixels=pack(pixels)
+        lines.append(f'static const uint8_t {name}_pixels[]={{')
+        lines.extend(','.join(str(v) for v in pixels[i:i+36])+',' for i in range(0,len(pixels),36))
+        declaration='extern const' if name=='radar_logo' else ''
+        data=f'{name}_pixels' if name=='radar_logo' else 'nullptr'
+        lines.extend(['};',f'{declaration} lv_img_dsc_t {name} = {{{{{fmt},0,0,{width},{height}}},{raw_size},{data}}};'])
+    lines.append('#endif')
+    if name.startswith('watch_') and name not in ('watch_logo_hackazillarex','watch_logo_m33k','watch_logo_capsule','watch_logo_sparrows','watch_logo_dzaz','watch_logo_can_commander','watch_logo_ogg','watch_logo_xombi','watch_logo_muldersrevenge','watch_logo_mitm','watch_logo_vp','watch_lock_vp','watch_logo_argyle','watch_logo_llt','watch_logo_moki','watch_logo_delta44','watch_dial_delta44'):lines.append('#endif')
+lines += ['struct PackedThemeLogo {lv_img_dsc_t* image; const uint8_t* bytes; size_t length;\n#ifdef BOARD_M5DIAL\nunsigned format=image->header.cf;\n#endif\n};','static const PackedThemeLogo packedThemeLogos[]={']
+for name,_ in logos:
+    if name=='radar_logo':continue
+    if name.startswith('watch_') and name not in ('watch_logo_hackazillarex','watch_logo_m33k','watch_logo_capsule','watch_logo_sparrows','watch_logo_dzaz','watch_logo_can_commander','watch_logo_ogg','watch_logo_xombi','watch_logo_muldersrevenge','watch_logo_mitm','watch_logo_vp','watch_lock_vp','watch_logo_argyle','watch_logo_llt','watch_logo_moki','watch_logo_delta44','watch_dial_delta44'):lines.append('#ifndef BOARD_RADAR_LITE')
+    lines.append(f'{{&{name},{name}_pixels,sizeof({name}_pixels)}},')
+    if name.startswith('watch_') and name not in ('watch_logo_hackazillarex','watch_logo_m33k','watch_logo_capsule','watch_logo_sparrows','watch_logo_dzaz','watch_logo_can_commander','watch_logo_ogg','watch_logo_xombi','watch_logo_muldersrevenge','watch_logo_mitm','watch_logo_vp','watch_lock_vp','watch_logo_argyle','watch_logo_llt','watch_logo_moki','watch_logo_delta44','watch_dial_delta44'):lines.append('#endif')
+lines += ['};', '''#ifdef BOARD_M5DIAL
+#include "dial_art_decoder.inc"
+#else
+// Decode once into PSRAM, retaining the exact indexed pixels and palette.
+// No per-frame allocations and no internal-RAM fallback on the 2 MB Lite.
+bool prepareThemeLogos(){
+ static bool attempted=false,ok=true;if(attempted)return ok;attempted=true;
+ for(const auto& item:packedThemeLogos){
+  auto* bytes=(uint8_t*)heap_caps_malloc(item.image->data_size,MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);
+  if(bytes&&dragon::unpackBlock(item.bytes,item.length,bytes,item.image->data_size))item.image->data=bytes;
+  else{free(bytes);*item.image=radar_logo;ok=false;}
+ }
+ return ok;
+}
+#endif''']
+(root/'firmware/src/radar_logo.cpp').write_text('\n'.join(lines)+'\n',encoding='utf8')
+print(f'Encoded {len(logos)} logo assets at 240/360/466 panel sizes; original artwork retained unchanged.')

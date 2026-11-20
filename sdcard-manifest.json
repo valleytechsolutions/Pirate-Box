@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "firmware": "Pirate Box 0.1.0 / Dragon Detector 0.13.42",
+  "upstream_archive": "dragon-resources-v1-20261023.zip",
+  "upstream_archive_sha256": "e2fff4498958e5e8b0d266b83a6ef3c0edc431df72cc295ae4e632607f6a2d2b",
+  "files": [
+    {
+      "path": "/dragon/profiles/piratebox-demo.ddg",
+      "bytes": 3379,
+      "sha256": "104e50d5a5e501536c5464afcc560507d160ce5d59c54794b43b97e082e2e766",
+      "usb": true,
+      "purpose": "Synthetic built-in BLE Lab demo serialized by the actual firmware header."
+    },
+    {
+      "path": "/dragon/resources/ATGM336H-SETUP.txt",
+      "bytes": 2124,
+      "sha256": "a921646703d386de355ab0341b728cc9ab6cabac6c4a68e9efd3770878575121",
+      "usb": true,
+      "purpose": "External GPS wiring and setup; no hardware acceptance claim."
+    },
+    {
+      "path": "/dragon/resources/FEATURES-AND-STORAGE-20261101.txt",
+      "bytes": 3392,
+      "sha256": "3a9dda0682175589a9703efd0cd4f64c75c1ff294526d676b9d525421de55433",
+      "usb": true,
+      "purpose": "Feature and storage inventory."
+    },
+    {
+      "path": "/dragon/resources/manifest.json",
+      "bytes": 748,
+      "sha256": "00ad35cad2aa742659079cf3f85e2fe1180662c8c745bbbfa7cc95c2081062be",
+      "usb": true,
+      "purpose": "Exact upstream vendor registry provenance and hash."
+    },
+    {
+      "path": "/dragon/resources/piratebox-avatar-happy-320.ddb",
+      "bytes": 204808,
+      "sha256": "816e93f31faee651e4bb5ee199897c1a04a1860e3c979ebf424c66419ec47259",
+      "usb": true,
+      "purpose": "Optional stock badge archive; active badge already embedded."
+    },
+    {
+      "path": "/dragon/resources/research-notes.txt",
+      "bytes": 929,
+      "sha256": "2e444fefb5c84b0b6c816af2cb77847360865fe84d62f0c1489ebe0eb82ac974",
+      "usb": true,
+      "purpose": "Exact upstream research notes."
+    },
+    {
+      "path": "/dragon/resources/UPSTREAM-READ-ME.txt",
+      "bytes": 522,
+      "sha256": "323c12844865e9228e551a8fbfa3d8c04383e690157bbcff67ef22618cb0edf7",
+      "usb": true,
+      "purpose": "USB-installable copy of upstream card-root readme."
+    },
+    {
+      "path": "/dragon/resources/vendors.ddr",
+      "bytes": 1270072,
+      "sha256": "66c709f56bc8d3c28f491003949a49c6a73958b50c9b66bcc51cd9dadf7c4bbe",
+      "usb": true,
+      "purpose": "Runtime extended IEEE vendor registry; restart required after first install."
+    },
+    {
+      "path": "/dragon/resources/wardriver-config-example.txt",
+      "bytes": 361,
+      "sha256": "eb72584d7b2931a68ed8ccc5a24882ae37369329e37edbe3b9ff81ac0a762b6f",
+      "usb": true,
+      "purpose": "Blank credentials example readable over USB."
+    },
+    {
+      "path": "/READ-ME.txt",
+      "bytes": 522,
+      "sha256": "323c12844865e9228e551a8fbfa3d8c04383e690157bbcff67ef22618cb0edf7",
+      "usb": false,
+      "purpose": "Exact upstream card-root readme; USB copy provided under resources."
+    },
+    {
+      "path": "/wardriver.cfg.example",
+      "bytes": 361,
+      "sha256": "eb72584d7b2931a68ed8ccc5a24882ae37369329e37edbe3b9ff81ac0a762b6f",
+      "usb": false,
+      "purpose": "Blank card-root credentials example for manual copy only."
+    }
+  ]
+}

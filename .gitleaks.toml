@@ -1,0 +1,18 @@
+title = "Pirate Box source checks"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Blank example values: matcher crosses the newline into the next field name"
+condition = "AND"
+paths = ['''^(?:.*/)?(?:docs/WARDRIVE-UPLOADS\.md|examples/wardriver\.cfg\.example|sdcard/wardriver\.cfg\.example|sdcard/dragon/resources/wardriver-config-example\.txt)$''']
+regexTarget = "secret"
+regexes = ['''^wdgwarsApiKey$''']
+
+[[allowlists]]
+description = "Exact synthetic parser fixture, not a service credential"
+condition = "AND"
+paths = ['''^(?:.*/)?tools/test_wardrive_upload\.py$''']
+regexTarget = "secret"
+regexes = ['''^abcdefgh12345678$''']

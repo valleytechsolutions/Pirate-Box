@@ -1,0 +1,60 @@
+PIRATE BOX SD RESOURCE BUNDLE — Dragon Detector 0.13.42 base
+
+Required for the extended vendor registry:
+  /dragon/resources/vendors.ddr
+This is the exact 2026-10-23 upstream DDR1 pack: 54,282 IEEE assignments.
+manifest.json and research-notes.txt retain its source/provenance information.
+Restart after first install, then run resources status. Expected: status=ready,
+snapshot=20261023, entries=54282, bytes=1270072. Lookup then uses PSRAM.
+
+BLE LAB:
+  /dragon/profiles/piratebox-demo.ddg
+This is the firmware's own synthetic Dragon Lab Demo exported using its exact
+DDG1 structs, demo() and checksum implementation: two services, two
+characteristics and one descriptor. It is not a captured peripheral identity.
+Select Saved profiles / piratebox-demo or use lab load piratebox-demo to inspect.
+Loading a profile does not start advertising, cloning or a connection.
+Service UUID names, company IDs, advertisement decoders, HID/report parsers,
+tracker protocols and BLE Lab operations are compiled in the firmware. There is
+no missing separate SD GATT-service dictionary or Bluetooth add-on executable.
+Profiles for actual devices come from their discovery sessions and must retain
+the actual service tree, properties and values; no fabricated device captures
+are provided. Your saved profiles/events are retained.
+
+VISUALS:
+Built-in themes, fonts, icons, backgrounds, clock faces, Pirate Box title,
+four friendly boot frames and sixteen live mascot frames are embedded in flash.
+They need no SD download.
+piratebox-avatar-happy-320.ddb is an optional archive of the happy 320x320 stock badge.
+It is NOT automatically loaded from SD; the same stock image is embedded.
+Active user badges are in internal LittleFS /badges/active.rgb565 and Personal
+themes in /personal/active.ddtheme, installed via their dedicated USB protocols.
+This bundle preserves those user choices and does not install a Personal theme.
+
+GENERATED DATA:
+The firmware creates /dragon/captures, profiles, events, surveys, missions and
+wardrive. It creates session folders as needed. These are data outputs rather
+than missing downloadable assets. No logs, captures or private data are bundled.
+
+GPS / RTC / WEATHER:
+ATGM336H-SETUP.txt documents the optional receive-only external GPS connection.
+No receiver is onboard or attached/verified. Firmware sensor, RTC and weather
+station support is embedded. GPS does not require an SD database or binary.
+
+UPLOAD CREDENTIALS:
+wardriver-config-example.txt contains blank keys only. The card-root file
+wardriver.cfg.example is for manual copying/renaming. The USB firmware protects
+all .cfg paths from retrieval, so the bundle installer does not touch them.
+No existing wardriver.cfg, profile, badge or Personal theme is overwritten.
+
+UNUSED LEGACY FILES:
+Old Marauder/PirateBox palettes.json, .pba and .pbb artwork are not consumed by
+this Dragon-based firmware and are not copied into this bundle.
+
+INSTALL:
+Extract/copy the sdcard directory contents to the card root, preserving existing
+files; or use tools/install_piratebox_square_sd.py for verified USB installation.
+The USB installer adds missing public bundle files and checks SHA-256 through
+get readback. It preserves conflicting files and .part files and reports them.
+USB-reachable copies of all root documentation are under /dragon/resources.
+Reruns resume at file boundaries; they never append to a partial file.

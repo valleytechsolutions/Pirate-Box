@@ -1,0 +1,13 @@
+Dragon Detector: interpreting radio evidence
+
+Registry assignments identify address registrants, not finished products or operators.
+MA-S (36 bits) takes precedence over MA-M (28), then MA-L (24).
+Random/private BLE addresses and locally administered Wi-Fi addresses have no OUI claim.
+Bluetooth Company Identifiers and IEEE address registrants are different namespaces.
+Advertising a service UUID is not proof that every associated GATT characteristic exists.
+Preserve raw bytes and address type with an observation; record unknowns rather than guess.
+Use existing BLE Lab/DDG1 profiles for owned-device service inspection and comparison.
+Notification payloads require a known format; unknown values remain hexadecimal.
+Observed advertisements can be spoofed; a label alone is not detection confidence.
+No executable rules or scripts are loaded from this pack.
+Original Dragon Detector reference notes; MIT application license.

@@ -1,0 +1,12 @@
+{
+  "source": "https://standards-oui.ieee.org/oui/oui.csv",
+  "source_sha256": "1033b24ab23480143c0232d6232bae3cd8b4d46fd6121617799ea97b93d4c193",
+  "prefix_bits": 24,
+  "entries": 40333,
+  "organization_labels": 20126,
+  "shared_prefixes": 2,
+  "index_bytes": 241998,
+  "names_bytes": 467217,
+  "generated_sha256": "f744c4dc9e12961683f0d377220983a8b62eb4e40e8f7c64519ba6becc584292",
+  "compressed_bytes": 462273
+}

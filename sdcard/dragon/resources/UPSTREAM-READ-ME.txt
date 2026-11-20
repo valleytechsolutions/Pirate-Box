@@ -1,0 +1,9 @@
+Dragon Detector optional SD resource pack v1
+Requires SD-resource beta firmware 0.13.28 or newer.
+Extract dragon/ to the FAT32 SD root: /dragon/resources/vendors.ddr
+Do not copy the ZIP itself or add a containing directory. Restart to load.
+Existing captures and private config.txt must be preserved.
+No card or invalid pack: internal MA-L lookup remains available.
+Resource labels are registry ownership facts, not product identity.
+No credentials or user captures are included.
+See manifest.json for IEEE source hashes.

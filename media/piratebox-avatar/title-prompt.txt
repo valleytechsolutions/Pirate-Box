@@ -1,0 +1,5 @@
+Use case: logo-brand.
+Asset type: pixel-art title wordmark for the 320x320 boot screen of handheld firmware.
+Create a single wide horizontal wordmark containing ONLY the exact words "PIRATE BOX". Spell P-I-R-A-T-E [space] B-O-X, one line, all uppercase, absolutely readable.
+Typography: striking classic pirate tavern / buccaneer sign lettering translated into crisp deliberate 8-bit pixel art. Strong blocky ornamental serif letterforms, a few angular swash terminals but no illegible flourishes. Warm pale gold highlight faces, rich saturated gold body, small deep red inset/shadow accents, black outer keyline. Small hard-pixel beveling gives depth, never smooth gradients. This must read well when reduced to about 280 pixels wide and 44 pixels high.
+Composition: only the letters, with very small transparent margin on all four sides, wide landscape aspect around 5:1. No banners, skulls, bones, swords, ships, flags, chains, jewels, scenery, supplementary text, watermark, glow haze, or border around the entire image. True transparent background, clean silhouette, no baked-in checkerboard.

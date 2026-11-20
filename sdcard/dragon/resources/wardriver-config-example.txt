@@ -1,0 +1,9 @@
+# Pirate Box / Dragon Detector optional upload configuration example.
+# Copy to SD root as wardriver.cfg only after adding your own credentials.
+# Never publish a filled configuration. Existing wardriver.cfg is preserved.
+# The firmware also creates a blank wardriver.cfg if none exists.
+homeSsid=
+homePsk=
+uploadNetworkProfile=
+wigleBasicToken=
+wdgwarsApiKey=
